@@ -59,3 +59,18 @@ def mostrar_estadisticas(nombre):
 nombre_jugador = input("Introduce el nombre del jugador: ")
 
 mostrar_estadisticas(nombre_jugador)
+
+def actualizar_estadisticas(nombre, estadistica, valor):
+    for jugador in jugadores:
+        if jugador["nombre"].lower() == nombre.lower():
+            if estadistica in jugador:
+                jugador[estadistica] = valor
+                print(f"\nEstadística actualizada correctamente:")
+                print(f"{jugador['nombre']} → {estadistica} = {valor}")
+                return
+            else:
+                print("Esa estadística no existe.")
+                return
+
+    print("Jugador no encontrado.")
+
