@@ -74,3 +74,19 @@ def actualizar_estadisticas(nombre, estadistica, valor):
 
     print("Jugador no encontrado.")
 
+respuesta = input("\n¿Quieres actualizar estadísticas? (si/no): ").lower()
+
+if respuesta == "si":
+
+    estadistica = input("Qué estadística quieres actualizar: ").lower()
+    valor = int(input("Nuevo valor: "))
+
+    actualizar_estadisticas(nombre_jugador, estadistica, valor)
+
+    print("\nEstadísticas actualizadas:\n")
+
+    for jugador in jugadores:
+        print(jugador)
+
+else:
+    print("No hay cambios en las estadísticas.")
