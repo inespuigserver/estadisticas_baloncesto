@@ -56,7 +56,7 @@ def mostrar_estadisticas(nombre):
     print("Jugador no encontrado")
 
 
-nombre_jugador = input("Introduce el nombre del jugador: ")
+nombre_jugador = input("Introduce el nombre del jugador: ").lower().capitalize()
 
 mostrar_estadisticas(nombre_jugador)
 
