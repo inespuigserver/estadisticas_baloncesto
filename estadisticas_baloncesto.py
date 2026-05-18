@@ -506,40 +506,7 @@ def pantalla_todos():
     datos = []
 
     for jugador in jugadores:
+        print(jugador)
 
-        datos.append([
-            jugador["nombre"],
-            jugador["puntos"],
-            jugador["rebotes"],
-            jugador["asistencias"],
-            jugador["robos"],
-            jugador["bloqueos"]
-        ])
-
-    tabla = ax.table(
-        cellText=datos,
-        colLabels=columnas,
-        cellLoc="center",
-        loc="center"
-    )
-
-    tabla.auto_set_font_size(False)
-    tabla.set_fontsize(11)
-    tabla.scale(1, 1.5)
-
-    crear_boton(
-        [0.38, 0.06, 0.24, 0.08],
-        "Volver",
-        lambda event: pantalla_menu_jugador()
-    )
-
-    plt.draw()
-
-
-# -------------------------------------------------
-# INICIO
-# -------------------------------------------------
-
-pantalla_inicio()
-
-plt.show()
+    else:
+        print("No hay cambios en las estadísticas.")
