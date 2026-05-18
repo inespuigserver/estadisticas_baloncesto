@@ -89,6 +89,53 @@ def seleccionar_jugador(nombre):
 
     pantalla_menu_jugador()
 
+#pantalla grafico
+def pantalla_grafico():
+
+    limpiar_pantalla()
+
+    fig.suptitle(
+        f"GRÁFICO DE {jugador_actual['nombre']}",
+        fontsize=18,
+        fontweight="bold"
+    )
+
+    estadisticas_jugador = [
+        jugador_actual["puntos"],
+        jugador_actual["rebotes"],
+        jugador_actual["asistencias"],
+        jugador_actual["robos"],
+        jugador_actual["bloqueos"]
+    ]
+
+    nombres = [
+        "Puntos",
+        "Rebotes",
+        "Asistencias",
+        "Robos",
+        "Bloqueos"
+    ]
+
+    ax = fig.add_axes([0.10, 0.20, 0.80, 0.60])
+
+    ax.bar(
+        nombres,
+        estadisticas_jugador
+    )
+
+    ax.set_ylabel("Valor")
+
+    ax.set_title(
+        f"Estadísticas de {jugador_actual['nombre']}"
+    )
+
+    crear_boton(
+        [0.38, 0.05, 0.24, 0.08],
+        "Volver",
+        lambda event: pantalla_menu_jugador()
+    )
+
+    plt.draw()
 
 # -------------------------------------------------
 # MENÚ DEL JUGADOR
@@ -105,6 +152,7 @@ def pantalla_menu_jugador():
     )
 
     ax = fig.add_axes([0.08, 0.22, 0.35, 0.55])
+
     ax.axis("off")
 
     texto = (
@@ -155,13 +203,30 @@ def pantalla_menu_jugador():
     )
 
     crear_boton(
-        [0.55, 0.08, 0.28, 0.08],
+        [0.55, 0.12, 0.28, 0.08],
+        "Ver gráfico",
+        lambda event: pantalla_grafico()
+    )
+
+    crear_boton(
+        [0.55, 0.02, 0.28, 0.08],
+        "Crear jugador",
+        lambda event: pantalla_crear_jugador()
+    )
+
+    crear_boton(
+        [0.55, -0.08, 0.28, 0.08],
+        "Eliminar jugador",
+        lambda event: pantalla_eliminar_jugador()
+    )
+
+    crear_boton(
+        [0.55, -0.18, 0.28, 0.08],
         "Cambiar jugador",
         lambda event: pantalla_inicio()
     )
 
     plt.draw()
-
 
 # -------------------------------------------------
 # ACTUALIZAR ESTADÍSTICAS
@@ -506,7 +571,262 @@ def pantalla_todos():
     datos = []
 
     for jugador in jugadores:
-        print(jugador)
 
-    else:
-        print("No hay cambios en las estadísticas.")
+        datos.append([
+            jugador["nombre"],
+            jugador["puntos"],
+            jugador["rebotes"],
+            jugador["asistencias"],
+            jugador["robos"],
+            jugador["bloqueos"]
+        ])
+
+    tabla = ax.table(
+        cellText=datos,
+        colLabels=columnas,
+        cellLoc="center",
+        loc="center"
+    )
+
+    tabla.auto_set_font_size(False)
+    tabla.set_fontsize(11)
+    tabla.scale(1, 1.5)
+
+    crear_boton(
+        [0.38, 0.06, 0.24, 0.08],
+        "Volver",
+        lambda event: pantalla_menu_jugador()
+    )
+    plt.draw()
+def pantalla_crear_jugador():
+
+    limpiar_pantalla()
+
+    fig.suptitle(
+        "CREAR NUEVO JUGADOR",
+        fontsize=18,
+        fontweight="bold"
+    )
+
+    cajas = {}
+
+    campos = [
+        "nombre",
+        "puntos",
+        "rebotes",
+        "asistencias",
+        "robos",
+        "bloqueos"
+    ]
+
+    y = 0.72
+
+    for campo in campos:
+
+        ax_caja = fig.add_axes([0.35, y, 0.30, 0.06])
+
+        caja = TextBox(
+            ax_caja,
+            campo.capitalize() + ": "
+        )
+
+        cajas[campo] = caja
+
+        widgets.append(caja)
+
+        y -= 0.09
+
+    ax_resultado = fig.add_axes([0.20, 0.12, 0.60, 0.08])
+
+    ax_resultado.axis("off")
+
+    def crear(event):
+
+        ax_resultado.clear()
+
+        ax_resultado.axis("off")
+
+        nombre = cajas["nombre"].text.strip()
+
+        if nombre == "":
+
+            ax_resultado.text(
+                0.5,
+                0.5,
+                "Debes escribir un nombre",
+                fontsize=12,
+                ha="center",
+                va="center"
+            )
+
+        elif buscar_jugador(nombre) is not None:
+
+            ax_resultado.text(
+                0.5,
+                0.5,
+                "Ese jugador ya existe",
+                fontsize=12,
+                ha="center",
+                va="center"
+            )
+
+        else:
+
+            nuevo_jugador = {
+                "nombre": nombre
+            }
+
+            correcto = True
+
+            for estadistica in estadisticas:
+
+                valor = cajas[estadistica].text.strip()
+
+                if not valor.isdigit():
+
+                    correcto = False
+
+                else:
+
+                    nuevo_jugador[estadistica] = int(valor)
+
+            if correcto:
+
+                jugadores.append(nuevo_jugador)
+
+                ax_resultado.text(
+                    0.5,
+                    0.5,
+                    "Jugador creado correctamente",
+                    fontsize=12,
+                    ha="center",
+                    va="center"
+                )
+
+            else:
+
+                ax_resultado.text(
+                    0.5,
+                    0.5,
+                    "Las estadísticas deben ser números",
+                    fontsize=12,
+                    ha="center",
+                    va="center"
+                )
+
+        plt.draw()
+
+    crear_boton(
+        [0.25, 0.04, 0.20, 0.07],
+        "Crear",
+        crear
+    )
+
+    crear_boton(
+        [0.55, 0.04, 0.20, 0.07],
+        "Volver",
+        lambda event: pantalla_menu_jugador()
+    )
+
+    plt.draw()
+
+
+def pantalla_eliminar_jugador():
+
+    limpiar_pantalla()
+
+    fig.suptitle(
+        "ELIMINAR JUGADOR",
+        fontsize=18,
+        fontweight="bold"
+    )
+
+    ax = fig.add_axes([0.15, 0.78, 0.70, 0.10])
+
+    ax.axis("off")
+
+    ax.text(
+        0.5,
+        0.5,
+        "Selecciona el jugador que quieres eliminar",
+        fontsize=14,
+        ha="center",
+        va="center"
+    )
+
+    y = 0.68
+
+    for jugador in jugadores:
+
+        crear_boton(
+            [0.38, y, 0.24, 0.045],
+            jugador["nombre"],
+            lambda event, nombre=jugador["nombre"]: pantalla_confirmar_eliminar(nombre)
+        )
+
+        y -= 0.055
+
+    crear_boton(
+        [0.38, 0.04, 0.24, 0.07],
+        "Volver",
+        lambda event: pantalla_menu_jugador()
+    )
+
+    plt.draw()
+
+
+def pantalla_confirmar_eliminar(nombre):
+
+    limpiar_pantalla()
+
+    fig.suptitle(
+        "CONFIRMAR ELIMINACIÓN",
+        fontsize=18,
+        fontweight="bold"
+    )
+
+    ax = fig.add_axes([0.20, 0.35, 0.60, 0.30])
+
+    ax.axis("off")
+
+    ax.text(
+        0.5,
+        0.5,
+        f"¿Seguro que quieres eliminar a {nombre}?",
+        fontsize=16,
+        ha="center",
+        va="center"
+    )
+
+    def eliminar(event):
+
+        global jugador_actual
+
+        jugador = buscar_jugador(nombre)
+
+        if jugador is not None:
+
+            jugadores.remove(jugador)
+
+            if jugador_actual == jugador:
+
+                jugador_actual = None
+
+        pantalla_inicio()
+
+    crear_boton(
+        [0.25, 0.18, 0.20, 0.08],
+        "Sí, eliminar",
+        eliminar
+    )
+
+    crear_boton(
+        [0.55, 0.18, 0.20, 0.08],
+        "Cancelar",
+        lambda event: pantalla_eliminar_jugador()
+    )
+    plt.draw()
+
+pantalla_inicio()
+
+plt.show()
