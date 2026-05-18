@@ -830,3 +830,44 @@ def pantalla_confirmar_eliminar(nombre):
 pantalla_inicio()
 
 plt.show()
+
+
+
+# Mostrar todos los jugadores en formato tabla
+def mostrar_tabla_jugadores():
+    print("ESTADÍSTICAS DEL EQUIPO")
+    print(f"{'Nombre':<12}{'Puntos':<10}{'Rebotes':<12}{'Asistencias':<15}{'Robos':<10}{'Bloqueos':<12}")
+    print("-" * 70)
+
+    for jugador in jugadores:
+        print(f"{jugador['nombre']:<12}"
+              f"{jugador['puntos']:<10}"
+              f"{jugador['rebotes']:<12}"
+              f"{jugador['asistencias']:<15}"
+              f"{jugador['robos']:<10}"
+              f"{jugador['bloqueos']:<12}")
+
+respuesta_tabla = input("¿Quieres mostrar todos los jugadores en tabla? (si/no): ").lower()
+if respuesta_tabla == "si":
+    mostrar_tabla_jugadores()
+else: 
+    print("No se mostrará la tabla.")
+
+
+
+# Calcular promedio de cualquier estadística
+def promedio_cualquier_estadistica():
+    estadistica = elegir_estadistica()
+    if estadistica is None:
+        return
+    total = 0
+    for jugador in jugadores:
+        total += jugador[estadistica]
+    promedio = total / len(jugadores)
+    print(f"Promedio de {estadistica}: {promedio:.2f}")
+
+respuesta_promedio2 = input("¿Quieres calcular el promedio de alguna estadística? (si/no): ").lower()
+if respuesta_promedio2 == "si": 
+    promedio_cualquier_estadistica()
+else:
+    print("No se calculará ningún promedio.")
