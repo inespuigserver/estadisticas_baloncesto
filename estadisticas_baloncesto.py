@@ -96,7 +96,7 @@ def crear_ax(posicion, color=COLOR_FONDO):
     return ax
 
 
-def crear_cabecera(titulo, subtitulo="Basketball analytics dashboard"):
+def crear_cabecera(titulo, subtitulo="Basketball analytics"):
     fig.text(
         0.05, 0.94,
         "GAMESTATS",
@@ -379,7 +379,7 @@ def pantalla_menu_jugador():
         ("Ordenar jugadores", pantalla_ordenar),
         ("Analizar equipo", pantalla_analisis),
         ("Ver todos", pantalla_todos),
-        ("Quinteto inicial", pantalla_quinteto_inicial),
+        ("Titulares", pantalla_titulares),
         ("Crear jugador", pantalla_crear_jugador),
         ("Eliminar jugador", pantalla_eliminar_jugador),
         ("Cambiar jugador", pantalla_inicio),
@@ -865,12 +865,12 @@ def pantalla_todos():
 
     plt.draw()
 
-def pantalla_quinteto_inicial():
+def pantalla_titulares():
 
     limpiar_pantalla()
 
     crear_cabecera(
-        "Quinteto inicial",
+        "Titulares",
         "Mejores jugadores disponibles por cada estadística"
     )
     estadisticas_quinteto = [
@@ -911,7 +911,7 @@ def pantalla_quinteto_inicial():
 
     fig.text(
         0.06, 0.80,
-        "QUINTETO INICIAL",
+        "TITULARES",
         fontsize=28,
         fontweight="bold",
         color=COLOR_TEXTO,
