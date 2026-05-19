@@ -173,55 +173,55 @@ def pantalla_menu_jugador():
     )
 
     crear_boton(
-        [0.55, 0.70, 0.28, 0.08],
+        [0.55, 0.74, 0.28, 0.065],
         "Actualizar estadísticas",
         lambda event: pantalla_actualizar()
     )
 
     crear_boton(
-        [0.55, 0.58, 0.28, 0.08],
+        [0.55, 0.65, 0.28, 0.065],
         "Mejor jugador",
         lambda event: pantalla_mejor_jugador()
     )
 
     crear_boton(
-        [0.55, 0.46, 0.28, 0.08],
+        [0.55, 0.56, 0.28, 0.065],
         "Ordenar jugadores",
         lambda event: pantalla_ordenar()
     )
 
     crear_boton(
-        [0.55, 0.34, 0.28, 0.08],
+        [0.55, 0.47, 0.28, 0.065],
         "Analizar equipo",
         lambda event: pantalla_analisis()
     )
 
     crear_boton(
-        [0.55, 0.22, 0.28, 0.08],
+        [0.55, 0.38, 0.28, 0.065],
         "Ver todos",
         lambda event: pantalla_todos()
     )
 
     crear_boton(
-        [0.55, 0.12, 0.28, 0.08],
+        [0.55, 0.29, 0.28, 0.065],
         "Ver gráfico",
         lambda event: pantalla_grafico()
     )
 
     crear_boton(
-        [0.55, 0.02, 0.28, 0.08],
+        [0.55, 0.20, 0.28, 0.065],
         "Crear jugador",
         lambda event: pantalla_crear_jugador()
     )
 
     crear_boton(
-        [0.55, -0.08, 0.28, 0.08],
+        [0.55, 0.11, 0.28, 0.065],
         "Eliminar jugador",
         lambda event: pantalla_eliminar_jugador()
     )
 
     crear_boton(
-        [0.55, -0.18, 0.28, 0.08],
+        [0.55, 0.02, 0.28, 0.065],
         "Cambiar jugador",
         lambda event: pantalla_inicio()
     )
