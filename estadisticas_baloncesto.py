@@ -1,5 +1,8 @@
 import matplotlib.pyplot as plt
 from matplotlib.widgets import Button, TextBox
+from matplotlib import rcParams
+
+rcParams['font.family'] = 'DejaVu Sans'
 
 
 jugadores = [
@@ -34,10 +37,33 @@ def limpiar_pantalla():
 
 
 def crear_boton(posicion, texto, funcion):
+
     ax = fig.add_axes(posicion)
-    boton = Button(ax, texto)
+
+    ax.set_facecolor("#2563EB")
+
+    boton = Button(
+        ax,
+        texto,
+        color="#2563EB",
+        hovercolor="#60A5FA"
+    )
+
+    boton.label.set_color("white")
+
+    boton.label.set_fontsize(11)
+
+    boton.label.set_fontweight("bold")
+
+    boton.label.set_fontname("DejaVu Sans")
+
+    for borde in ax.spines.values():
+        borde.set_visible(False)
+
     boton.on_clicked(funcion)
+
     widgets.append(boton)
+
     return boton
 
 
@@ -56,26 +82,42 @@ def pantalla_inicio():
 
     limpiar_pantalla()
 
+    fig.patch.set_facecolor("#0F172A")
+
     fig.suptitle(
         "ELIGE UN JUGADOR",
-        fontsize=20,
-        fontweight="bold"
+        fontsize=24,
+        fontweight="bold",
+        fontname="DejaVu Sans",
+        color="#F8FAFC"
     )
 
-    y = 0.80
+    columnas = 3
 
-    for jugador in jugadores:
+    x_inicial = 0.12
+    y_inicial = 0.75
+
+    ancho = 0.22
+    alto = 0.08
+
+    separacion_x = 0.26
+    separacion_y = 0.12
+
+    for i, jugador in enumerate(jugadores):
+
+        fila = i // columnas
+        columna = i % columnas
+
+        x = x_inicial + columna * separacion_x
+        y = y_inicial - fila * separacion_y
 
         crear_boton(
-            [0.38, y, 0.24, 0.045],
+            [x, y, ancho, alto],
             jugador["nombre"],
             lambda event, nombre=jugador["nombre"]: seleccionar_jugador(nombre)
         )
 
-        y -= 0.055
-
     plt.draw()
-
 
 # -------------------------------------------------
 # SELECCIONAR JUGADOR
@@ -94,10 +136,14 @@ def pantalla_grafico():
 
     limpiar_pantalla()
 
+    fig.patch.set_facecolor("#0F172A")
+
     fig.suptitle(
         f"GRÁFICO DE {jugador_actual['nombre']}",
-        fontsize=18,
-        fontweight="bold"
+        fontsize=22,
+        fontweight="bold",
+        color="#F8FAFC",
+        fontname="DejaVu Sans"
     )
 
     estadisticas_jugador = [
@@ -116,17 +162,73 @@ def pantalla_grafico():
         "Bloqueos"
     ]
 
-    ax = fig.add_axes([0.10, 0.20, 0.80, 0.60])
+    colores = [
+        "#FF6B6B",   # puntos
+        "#4D96FF",   # rebotes
+        "#6BCB77",   # asistencias
+        "#FFD93D",   # robos
+        "#9D4EDD"    # bloqueos
+    ]
 
-    ax.bar(
+    ax = fig.add_axes([0.10, 0.22, 0.80, 0.58])
+
+    ax.set_facecolor("white")
+
+    barras = ax.bar(
         nombres,
-        estadisticas_jugador
+        estadisticas_jugador,
+        color=colores,
+        edgecolor="black",
+        linewidth=1.5
     )
 
-    ax.set_ylabel("Valor")
+    ax.set_ylabel(
+        "Valor",
+        fontsize=13,
+        fontweight="bold",
+        fontname="DejaVu Sans"
+    )
 
     ax.set_title(
-        f"Estadísticas de {jugador_actual['nombre']}"
+        f"Estadísticas de {jugador_actual['nombre']}",
+        fontsize=16,
+        pad=15
+    )
+
+    ax.grid(
+        axis="y",
+        linestyle="--",
+        alpha=0.4
+    )
+
+    for barra in barras:
+
+        altura = barra.get_height()
+
+        ax.text(
+            barra.get_x() + barra.get_width()/2,
+            altura + 0.3,
+            str(altura),
+            ha='center',
+            fontsize=11,
+            fontweight="bold",
+            fontname="DejaVu Sans"
+        )
+
+    from matplotlib.patches import Patch
+
+    leyenda = [
+        Patch(facecolor="#FF6B6B", label="Puntos"),
+        Patch(facecolor="#4D96FF", label="Rebotes"),
+        Patch(facecolor="#6BCB77", label="Asistencias"),
+        Patch(facecolor="#FFD93D", label="Robos"),
+        Patch(facecolor="#9D4EDD", label="Bloqueos")
+    ]
+
+    ax.legend(
+        handles=leyenda,
+        loc="upper right",
+        fontsize=10
     )
 
     crear_boton(
@@ -148,7 +250,9 @@ def pantalla_menu_jugador():
     fig.suptitle(
         f"JUGADOR: {jugador_actual['nombre']}",
         fontsize=18,
-        fontweight="bold"
+        fontweight="bold",
+        color="#F8FAFC",
+        fontname="DejaVu Sans"
     )
 
     ax = fig.add_axes([0.08, 0.22, 0.35, 0.55])
@@ -239,7 +343,9 @@ def pantalla_actualizar():
     fig.suptitle(
         f"Actualizar estadísticas de {jugador_actual['nombre']}",
         fontsize=18,
-        fontweight="bold"
+        fontweight="bold",
+        color="#F8FAFC",
+        fontname="DejaVu Sans"
     )
 
     ax = fig.add_axes([0.12, 0.60, 0.75, 0.20])
@@ -250,6 +356,8 @@ def pantalla_actualizar():
         1,
         "Escribe la estadística y el nuevo valor",
         fontsize=14,
+        color="#F8FAFC",
+        fontname="DejaVu Sans",
         va="top"
     )
 
@@ -329,7 +437,9 @@ def pantalla_mejor_jugador():
     fig.suptitle(
         "MEJOR JUGADOR",
         fontsize=18,
-        fontweight="bold"
+        fontweight="bold",
+        color="#F8FAFC",
+        fontname="DejaVu Sans"
     )
 
     ax = fig.add_axes([0.15, 0.68, 0.7, 0.12])
@@ -340,6 +450,7 @@ def pantalla_mejor_jugador():
         0.5,
         "Selecciona una estadística",
         fontsize=14,
+        color="#F8FAFC",
         ha="center"
     )
 
@@ -373,7 +484,9 @@ def mostrar_mejor(estadistica):
     fig.suptitle(
         f"Mejor jugador en {estadistica}",
         fontsize=18,
-        fontweight="bold"
+        fontweight="bold",
+        color="#F8FAFC",
+        fontname="DejaVu Sans"
     )
 
     ax = fig.add_axes([0.20, 0.30, 0.60, 0.40])
@@ -384,6 +497,7 @@ def mostrar_mejor(estadistica):
         0.5,
         f"{mejor['nombre']}\n\n{estadistica}: {mejor[estadistica]}",
         fontsize=20,
+        color="#F8FAFC",
         ha="center",
         va="center"
     )
@@ -408,7 +522,9 @@ def pantalla_ordenar():
     fig.suptitle(
         "ORDENAR JUGADORES",
         fontsize=18,
-        fontweight="bold"
+        fontweight="bold",
+        color="#F8FAFC",
+        fontname="DejaVu Sans"
     )
 
     ax = fig.add_axes([0.15, 0.68, 0.7, 0.12])
@@ -419,6 +535,7 @@ def pantalla_ordenar():
         0.5,
         "Selecciona una estadística",
         fontsize=14,
+        color="#F8FAFC",
         ha="center"
     )
 
@@ -450,7 +567,9 @@ def mostrar_ordenados(estadistica):
     fig.suptitle(
         f"Jugadores ordenados por {estadistica}",
         fontsize=18,
-        fontweight="bold"
+        fontweight="bold",
+        color="#F8FAFC",
+        fontname="DejaVu Sans"
     )
 
     lista = sorted(
@@ -505,7 +624,10 @@ def pantalla_analisis():
     fig.suptitle(
         "ANÁLISIS DEL EQUIPO",
         fontsize=18,
-        fontweight="bold")
+        fontweight="bold",
+        color="#F8FAFC",
+        fontname="DejaVu Sans"
+    )
 
     mas_puntos = max(jugadores, key=lambda j: j["puntos"])
     mas_rebotes = max(jugadores, key=lambda j: j["rebotes"])
@@ -560,7 +682,9 @@ def pantalla_todos():
     fig.suptitle(
         "TODOS LOS JUGADORES",
         fontsize=18,
-        fontweight="bold"
+        fontweight="bold",
+        color="#F8FAFC",
+        fontname="DejaVu Sans"
     )
 
     ax = fig.add_axes([0.08, 0.18, 0.84, 0.68])
@@ -614,7 +738,9 @@ def pantalla_crear_jugador():
     fig.suptitle(
         "CREAR NUEVO JUGADOR",
         fontsize=18,
-        fontweight="bold"
+        fontweight="bold",
+        color="#F8FAFC",
+        fontname="DejaVu Sans"
     )
 
     cajas = {}
@@ -747,7 +873,9 @@ def pantalla_eliminar_jugador():
     fig.suptitle(
         "ELIMINAR JUGADOR",
         fontsize=18,
-        fontweight="bold"
+        fontweight="bold",
+        color="#F8FAFC",
+        fontname="DejaVu Sans"
     )
 
     ax = fig.add_axes([0.15, 0.78, 0.70, 0.10])
@@ -791,7 +919,9 @@ def pantalla_confirmar_eliminar(nombre):
     fig.suptitle(
         "CONFIRMAR ELIMINACIÓN",
         fontsize=18,
-        fontweight="bold"
+        fontweight="bold",
+        color="#F8FAFC",
+        fontname="DejaVu Sans"
     )
 
     ax = fig.add_axes([0.20, 0.35, 0.60, 0.30])
