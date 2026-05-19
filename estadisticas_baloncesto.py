@@ -505,42 +505,49 @@ def pantalla_analisis():
     fig.suptitle(
         "ANÁLISIS DEL EQUIPO",
         fontsize=18,
-        fontweight="bold"
-    )
+        fontweight="bold")
 
-    total_puntos = sum(j["puntos"] for j in jugadores)
-    promedio = total_puntos / len(jugadores)
+    mas_puntos = max(jugadores, key=lambda j: j["puntos"])
+    mas_rebotes = max(jugadores, key=lambda j: j["rebotes"])
+    mas_asistencias = max(jugadores, key=lambda j: j["asistencias"])
 
-    total_rebotes = sum(j["rebotes"] for j in jugadores)
-    total_asistencias = sum(j["asistencias"] for j in jugadores)
+    promedio_puntos = sum(j["puntos"] for j in jugadores) / len(jugadores)
+    promedio_rebotes = sum(j["rebotes"] for j in jugadores) / len(jugadores)
+    promedio_asistencias = sum(j["asistencias"] for j in jugadores) / len(jugadores)
+    promedio_robos = sum(j["robos"] for j in jugadores) / len(jugadores)
+    promedio_bloqueos = sum(j["bloqueos"] for j in jugadores) / len(jugadores)
 
-    ax = fig.add_axes([0.20, 0.25, 0.60, 0.50])
+    ax = fig.add_axes([0.15, 0.20, 0.70, 0.60])
+
     ax.axis("off")
 
     texto = (
-        f"Total de puntos: {total_puntos}\n\n"
-        f"Promedio de puntos: {round(promedio, 2)}\n\n"
-        f"Total de rebotes: {total_rebotes}\n\n"
-        f"Total de asistencias: {total_asistencias}"
-    )
+        f"JUGADORES DESTACADOS\n\n"
+        f"Más puntos: {mas_puntos['nombre']} ({mas_puntos['puntos']})\n"
+        f"Más rebotes: {mas_rebotes['nombre']} ({mas_rebotes['rebotes']})\n"
+        f"Más asistencias: {mas_asistencias['nombre']} ({mas_asistencias['asistencias']})\n\n"
+       
+        f"PROMEDIOS DEL EQUIPO\n\n"
+        f"Puntos: {promedio_puntos:.2f}\n"
+        f"Rebotes: {promedio_rebotes:.2f}\n"
+        f"Asistencias: {promedio_asistencias:.2f}\n"
+        f"Robos: {promedio_robos:.2f}\n"
+        f"Bloqueos: {promedio_bloqueos:.2f}")
 
     ax.text(
         0.5,
         0.5,
         texto,
-        fontsize=16,
+        fontsize=13,
         ha="center",
-        va="center"
-    )
+        va="center")
 
     crear_boton(
         [0.38, 0.08, 0.24, 0.08],
         "Volver",
-        lambda event: pantalla_menu_jugador()
-    )
+        lambda event: pantalla_menu_jugador())
 
     plt.draw()
-
 
 # -------------------------------------------------
 # TODOS LOS JUGADORES
@@ -598,6 +605,8 @@ def pantalla_todos():
         lambda event: pantalla_menu_jugador()
     )
     plt.draw()
+
+
 def pantalla_crear_jugador():
 
     limpiar_pantalla()
@@ -857,17 +866,30 @@ else:
 
 # Calcular promedio de cualquier estadística
 def promedio_cualquier_estadistica():
-    estadistica = elegir_estadistica()
-    if estadistica is None:
+
+    print("\nEstadísticas disponibles:")
+
+    for e in estadisticas:
+        print("-", e)
+
+    estadistica = input("Escribe la estadística que quieres promediar:").lower()
+    
+    if estadistica not in estadisticas:
+        print("Estadística no válida")
         return
+    
     total = 0
+
     for jugador in jugadores:
         total += jugador[estadistica]
+
     promedio = total / len(jugadores)
+
     print(f"Promedio de {estadistica}: {promedio:.2f}")
 
 respuesta_promedio2 = input("¿Quieres calcular el promedio de alguna estadística? (si/no): ").lower()
-if respuesta_promedio2 == "si": 
+
+if respuesta_promedio2 == "si":
     promedio_cualquier_estadistica()
 else:
     print("No se calculará ningún promedio.")
